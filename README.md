@@ -157,7 +157,7 @@ User Story (продавец):
 &nbsp;**Задача 3**
 
 На картинке (скачать можно по ссылке - <https://drive.google.com/file/d/1fi9JLRvO6bhS1uJJ2PUX8ZTOq0Eq_At0/view?usp=drive_link>) изображен интерфейс регистрации Пользователя (как успешный экран создания Пользователя, так и варианты с ошибками).
-```json
+```yaml
 openapi: 3.0.3
 info:
   title: Book Store Registration API

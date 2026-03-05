@@ -401,3 +401,73 @@ components:
   "timestamp": "2026-03-04T10:30:00Z"
 }
 ```
+**Задание 3.2**
+
+<img width="1416" height="1882" alt="Backend" src="https://github.com/user-attachments/assets/1e0f0b0b-a560-46b6-a8c9-85fa34b0b1ec" />
+
+
+Пошаговый алгоритм
+
+1\. Получение и парсинг запроса
+
+\- Извлечь JSON-тело запроса.
+
+\- Проверить Content-Type на application/json.
+
+\- Если тело пустое или неверный формат - вернуть 400 Bad Request сразу.
+
+2\. Синтаксическая валидация по схеме
+
+\- Проверить соответствие схеме OpenAPI (обязательные поля: username, email, password; типы, minLength/maxLength, pattern для username, format email для email).
+
+\- Если нарушения - собрать ошибки по полям и вернуть 400 с ErrorResponse.
+
+3\. Семантическая валидация полей
+
+\- Username: проверить на пустоту после trim, запретить пробелы/спецсимволы (кроме \_).
+
+\- Email: дополнительно проверить домен (не disposable, как mailinator.com).
+
+\- Password: наличие uppercase/lowercase/цифр/символов (regex), min 8 символов.
+
+\- Если ошибки - 400 с детальными сообщениями по полям.
+
+4\. Проверка уникальности
+
+\- Запрос в БД: SELECT по username и email (CASE INSENSITIVE).
+
+\- Если найдено - 409 Conflict с указанием дублирующего поля.
+
+5\. Дополнительные бизнес-проверки
+
+\- Rate limiting: проверить IP/пользователя на превышение попыток (например, 5/мин).
+
+\- Блокировка подозрительных: проверить email/username на черный список (спам, боты).
+
+\- Если fail - 429 Too Many Requests или 400.
+
+6\. Подготовка данных
+
+\- Хэшировать password (bcrypt/Argon2, salt rounds 12+).
+
+\- Сгенерировать userId (UUID).
+
+\- Нормализовать firstName/lastName (trim, lowercase).
+
+7\. Транзакция БД
+
+\- Начать транзакцию.
+
+\- INSERT в users таблицу с hashed_password, validated_email=false, email_validation_token=UUID.
+
+\- Если OK - commit и перейти к успеху.
+
+\- Rollback при любой ошибке.
+
+8\. Успешный финал и пост-обработка
+
+\- После commit: отправить email с validation token (асинхронно).
+
+\- Вернуть 201 Created с userId и базовыми данными (без password).
+
+\- Логировать событие для аудита.

@@ -378,7 +378,12 @@ components:
   "status": "success",
   "userId": 123
 }
-
+{
+  "userId": "550e8400-e29b-41d4-a716-446655440000",
+  "username": "ivan",
+  "message": "User Register Successfully",
+  "createdAt": "2026-03-04T10:30:00Z"
+}
 Пример ответа с ошибкой
 {
   "errorCode": "USER_ALREADY_EXISTS",
@@ -386,14 +391,6 @@ components:
   "field": "username",
   "timestamp": "2026-03-04T10:30:00Z"
 }
-
-{
-  "userId": "550e8400-e29b-41d4-a716-446655440000",
-  "username": "ivan",
-  "message": "User Register Successfully",
-  "createdAt": "2026-03-04T10:30:00Z"
-}
-
 {
   "errorCode": "VALIDATION_ERROR",
   "message": "Passwords must have at least one non alphanumeric character, one digit ('0'-'9'), one uppercase ('A'-'Z'), one lowercase ('a'-'z'), one special character and Password must be eight characters or longer",
